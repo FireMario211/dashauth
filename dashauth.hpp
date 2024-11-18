@@ -29,7 +29,7 @@ namespace dashauth {
             // then is also responsible for calling the callback
             log::info("requesting auth challenge for {} (base {})", this->m_mod->getID(), this->m_server_url);
 
-            auto token = geode::Mod::get()->getSavedValue<std::string>(fmt::format("dashauth_token_{}", this->m_mod->getID()));
+            //auto token = geode::Mod::get()->getSavedValue<std::string>(fmt::format("dashauth_token_{}", this->m_mod->getID()));
 
             if (!token.empty()) {
                 callback(token);
@@ -44,16 +44,16 @@ namespace dashauth {
 
                 this->m_listener.bind([this, account_manager] (web::WebTask::Event* e) {
                     if (web::WebResponse* value = e->getValue()) {
-                        geode::log::info("got response uwu");
+                        //geode::log::info("got response uwu");
                         // The request finished!
                         switch (this->m_progress) {
                             case REQUESTING_CHALLENGE: {
-                                geode::log::info("nyaaaaa !!");
+                                //geode::log::info("nyaaaaa !!");
                                 //geode::log::info("nyaaaaaaaa!! {}", value);
 
                                 auto json = value->json();
                                 if (!json.isOk()) {
-                                    auto message = fmt::format("failed to get challenge: {}", json.error());
+                                    auto message = fmt::format("failed to get challenge: {}", json.err());
                                     log::error("{}", message);
                                     this->m_except_callback(message);
                                     return;
@@ -99,7 +99,7 @@ namespace dashauth {
                             case SENDING_MESSAGE: {
                                 auto text = value->string();
                                 if (!text.isOk()) {
-                                    auto message = fmt::format("failed to send gd message: {}", text.error());
+                                    auto message = fmt::format("failed to send gd message: {}", text.err());
                                     log::error("{}", message);
                                     this->m_except_callback(message);
                                     return;
@@ -124,7 +124,7 @@ namespace dashauth {
                             case GETTING_TOKEN: {
                                 auto json = value->json();
                                 if (!json.isOk()) {
-                                    auto message = fmt::format("failed to get challenge: {}", json.error());
+                                    auto message = fmt::format("failed to get challenge: {}", json.err());
                                     log::error("{}", message);
                                     this->m_except_callback(message);
                                     return;
@@ -140,7 +140,7 @@ namespace dashauth {
                                     token = "uh oh";
                                 }
 
-                                geode::Mod::get()->setSavedValue<std::string>(fmt::format("dashauth_token_{}", this->m_mod->getID()), token);
+                                //geode::Mod::get()->setSavedValue<std::string>(fmt::format("dashauth_token_{}", this->m_mod->getID()), token);
                                 // this is safe because this runs on the gd thread (? does it anymore? idk)
                                 this->m_then_callback(token);
 
@@ -161,7 +161,7 @@ namespace dashauth {
                             case DONE_GETTING_SENT_MESSAGES: {
                                 auto text = value->string();
                                 if (!text.isOk()) {
-                                    log::error("failed to get gd messages: {}", text.error());
+                                    log::error("failed to get gd messages: {}", text.err());
                                     return;
                                 }
 
@@ -230,7 +230,7 @@ namespace dashauth {
                             }
                             case DONE_DELETING_MESSAGES: {
                                 // no checks !! :3
-                                log::info("cleaned up messages like a good girl >w<");
+                                //log::info("cleaned up messages like a good girl >w<");
                             }
                         }
 
@@ -278,7 +278,7 @@ namespace dashauth {
     class DashAuthRequest {
         public:
         DashAuthRequest() {
-            geode::log::info("constructed auth request >~<");
+            //geode::log::info("constructed auth request >~<");
         };
         ~DashAuthRequest() {
         };
