@@ -39,6 +39,7 @@ namespace dashauth {
 
             std::thread request_thread([this, account_manager] {
                 auto req = geode::utils::web::WebRequest();
+                req.userAgent("DashAuth/1.0");
                 req.timeout(std::chrono::seconds(6));
 
                 this->m_listener.bind([this, account_manager] (web::WebTask::Event* e) {
@@ -117,6 +118,7 @@ namespace dashauth {
 
                                 auto req = web::WebRequest();
                                 req.timeout(std::chrono::seconds(12));
+                                req.userAgent("DashAuth/1.0");
                                 this->m_listener.setFilter(req.get(fmt::format("{}/challenge_complete/{}", this->m_server_url, m_state_challenge_id))); // TODO: DO NOT HARDCODE THIS !!!
                                 break;
                             }
