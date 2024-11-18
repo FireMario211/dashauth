@@ -19,7 +19,7 @@ namespace dashauth {
     class SentDashAuthRequest {
         public:
         SentDashAuthRequest() {
-            geode::log::info("what are you doing");
+            //geode::log::info("what are you doing");
         };
         ~SentDashAuthRequest() {};
         void then(std::function<void(std::string const&)> callback) {
@@ -130,7 +130,7 @@ namespace dashauth {
                                 }
                                 auto response = json.unwrap();
 
-                                log::info("GOT API ACCESS TOKEN (REAL) (NOT FAKE): {}", response.dump());
+                                log::info("GOT API ACCESS TOKEN: {}", response.dump());
 
                                 std::string token = "";
                                 if (response.contains("success") && response["success"].asBool().unwrapOrDefault()) {
