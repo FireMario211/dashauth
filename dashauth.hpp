@@ -1,6 +1,5 @@
 #pragma once
 
-#include "dashauth.hpp"
 #include <Geode/utils/web.hpp>
 #include <vector>
 
@@ -30,12 +29,12 @@ namespace dashauth {
             log::info("requesting auth challenge for {} (base {})", this->m_mod->getID(), this->m_server_url);
 
             //auto token = geode::Mod::get()->getSavedValue<std::string>(fmt::format("dashauth_token_{}", this->m_mod->getID()));
-
+/*
             if (!token.empty()) {
                 callback(token);
                 return;
             }
-
+*/
             auto account_manager = GJAccountManager::sharedState();
 
             std::thread request_thread([this, account_manager] {
@@ -61,14 +60,14 @@ namespace dashauth {
                                 auto response = json.unwrap();
 
                                 // my own servers are non-spec compliant lmao
-                                if (response.contains("success") && response["success"].as_bool()) {
-                                    this->m_state_account_id = response["data"]["bot_account_id"].as_int();
-                                    m_state_challenge = response["data"]["challenge"].as_string();
-                                    m_state_challenge_id = response["data"]["id"].as_string();
+                                if (response.contains("success") && response["success"].asBool().unwrapOrDefault()) {
+                                    this->m_state_account_id = response["data"]["bot_account_id"].asInt().unwrapOrDefault();
+                                    m_state_challenge = response["data"]["challenge"].asString().unwrapOrDefault();
+                                    m_state_challenge_id = response["data"]["id"].asString().unwrapOrDefault();
                                 } else {
-                                    m_state_account_id = response["bot_account_id"].as_int();
-                                    m_state_challenge = response["challenge"].as_string();
-                                    m_state_challenge_id = response["id"].as_string();
+                                    m_state_account_id = response["bot_account_id"].asInt().unwrapOrDefault();
+                                    m_state_challenge = response["challenge"].asString().unwrapOrDefault();
+                                    m_state_challenge_id = response["id"].asString().unwrapOrDefault();
                                 }
 
                                 // send private message to bot account
@@ -131,11 +130,11 @@ namespace dashauth {
                                 }
                                 auto response = json.unwrap();
 
-                                log::info("GOT API ACCESS TOKEN (REAL) (NOT FAKE): {}", response);
+                                log::info("GOT API ACCESS TOKEN (REAL) (NOT FAKE): {}", response.dump());
 
                                 std::string token = "";
-                                if (response.contains("success") && response["success"].as_bool()) {
-                                    token = response["data"].as_string();
+                                if (response.contains("success") && response["success"].asBool().unwrapOrDefault()) {
+                                    token = response["data"].asString().unwrapOrDefault();
                                 } else {
                                     token = "uh oh";
                                 }
