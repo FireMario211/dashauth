@@ -48,6 +48,9 @@ class $modify(MyMenuLayer, MenuLayer) {
 
 including in your mod is very simple too:
 ```cmake
-CPMAddPackage("gh:RoootTheFox/dashauth#main")
+CPMAddPackage("gh:FireMario211/dashauth#main")
 target_link_libraries(${PROJECT_NAME} DashAuth)
 ```
+
+# Instances using this repo
+- `dashend.firee.dev`
