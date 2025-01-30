@@ -39,7 +39,7 @@ namespace dashauth {
 
             std::thread request_thread([this, account_manager] {
                 auto req = geode::utils::web::WebRequest();
-                req.userAgent("DashAuth/1.0");
+                req.userAgent(fmt::format("DashAuth/1.0 ({})", this->m_mod->getID()));
                 req.timeout(std::chrono::seconds(6));
 
                 this->m_listener.bind([this, account_manager] (web::WebTask::Event* e) {
@@ -48,9 +48,6 @@ namespace dashauth {
                         // The request finished!
                         switch (this->m_progress) {
                             case REQUESTING_CHALLENGE: {
-                                //geode::log::info("nyaaaaa !!");
-                                //geode::log::info("nyaaaaaaaa!! {}", value);
-
                                 auto json = value->json();
                                 if (!json.isOk()) {
                                     auto message = fmt::format("failed to get challenge: {}", json.err());
@@ -118,7 +115,7 @@ namespace dashauth {
 
                                 auto req = web::WebRequest();
                                 req.timeout(std::chrono::seconds(12));
-                                req.userAgent("DashAuth/1.0");
+                                req.userAgent(fmt::format("DashAuth/1.0 ({})", this->m_mod->getID()));
                                 this->m_listener.setFilter(req.get(fmt::format("{}/challenge_complete/{}", this->m_server_url, m_state_challenge_id))); // TODO: DO NOT HARDCODE THIS !!!
                                 break;
                             }
@@ -237,8 +234,6 @@ namespace dashauth {
 
                     } else if (web::WebProgress* progress = e->getProgress()) {
                         // The request is still in progress...
-                        //log::info("pwogwess uwu");
-                        //log::info("pwogwess >w< {} | up {}", progress.downloadProgress().unwrapOr(-1), progress.uploadProgress().unwrapOr(-1));
                     } else if (e->isCancelled()) {
                         // our request was cancelled
                         this->m_except_callback("request was cancelled");
